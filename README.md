@@ -19,15 +19,18 @@ brackets, auto-closing pairs) work independently of the external Xu compiler.
 
 ## Syntax highlighting
 
-- Keywords (`src/xu/ast/kind.xu` `lookup_keyword`):
-  - control: `fn if else for in while match xu select or as is let`
+- Keywords (`src/xu/ast/kind.xu` `lookup_keyword` & parser extensions):
+  - control: `fn if else for in while match xu select or as is let unsafe`
   - declarations: `struct enum chan map any`
-  - modifiers: `pub` · other: `const`
+  - modifiers: `pub extern` · other: `const`
+  - Raw pointers: `*raw T` / `*raw mut T` / `*raw const T`
+  - Inline assembly: `asm!("...")` / `asm("...")`
+  - Compile tags: `$$freestanding`, `$$baremetal`, `$$linux`, `$$windows`, `$$arm64`, `$$x64` ...
   - Phase C mutability markers: `$name` (mutable binding), `$&` (mutable borrow)
   - legacy `mut` / `&mut` still highlighted (compiler compatibility period)
-  - primitives: `int bool string f64 i32 u32 u8 byte`
+  - primitives & scalars: `int bool string f64 f32 i32 u32 i16 u16 i8 u8 u64 byte c_ptr` & C types
   - **not** keywords: `interface` `module` `import` `return` `break` `continue` `Ok` `Err`
-- Functions: `fn name(` / `fn (recv T) name(` / generics `fn f#T(`
+- Functions: `fn name(` / `unsafe fn name(` / `fn (recv T) name(` / generics `fn f#T(`
 - Strings: double-quoted `"..."` with `\n \t \r \\ \' \"`, `$$`, `$ident`;
   raw `` `...` `` (no escapes). Single quotes are not language strings.
 - Numbers: decimal / float / hex / **binary** (`0b`) with `_` separators
@@ -35,7 +38,7 @@ brackets, auto-closing pairs) work independently of the external Xu compiler.
 - `@main` / `#path` / `#path as alias` / `alias #path`：`@`/`#` 与后面的名字/路径分属不同 scope（标点 vs 包名 vs 导入路径字符串色）
 - `xu.` path segment (not spawn keyword)
 - Builtins: `println` `eprintln` `str` `parse_int` `parse_float` `args`
-  `read_file` … `assert` `close` plus hosted `pid` `cwd` `env_get` …
+  `read_file` … `assert` `close` plus atomic, volatile & freestanding `volatile_store` `volatile_load` `raise_irq` `atomic_load` …
 - Operators（分 scope）:
   - 语句控制流 → `keyword.control.flow.xu`：`<<` return / `>>` throw / `<<<` exit / 无操作数 `->` continue / `<-` break
   - 表达式移位 → `keyword.operator.bitwise.xu`：`<<` `>>`
@@ -74,13 +77,17 @@ ln -sfn "$PWD" "$HOME/.vscode/extensions/xu-lang.xu-language-$EXTENSION_VERSION"
 | `string.unquoted.import.xu` | `#` 后导入路径 |
 | `variable.other.import-alias.xu` | 导入别名 |
 | `punctuation.definition.constraint.xu` | 粘连 `struct@` / `f#T` 的 `@`/`#` |
+| `punctuation.definition.directive.xu` | 行首 `$$` 编译标签引导符 |
+| `keyword.control.directive.xu` | 编译标签（如 `freestanding`, `linux`, `windows`） |
+| `storage.modifier.raw.xu` | `*raw` 中的 `raw` 指针修饰符 |
+| `support.function.asm.xu` | `asm!` / `asm` 内联汇编指令 |
 | `keyword.control.flow.xu` | 语句 `<<`/`>>`/`<<<`；无操作数 `->`/`<-`；`or >>` |
 | `keyword.operator.bitwise.xu` | 表达式移位 `<<` `>>` |
 | `keyword.operator.range.xu` | `a:b` 区间（`for i in a:b`、`xs[lo:hi]`、match `0:13`） |
 | `keyword.operator.channel.xu` | `ch <- x` / `<-ch` |
 | `storage.type.xu` | `struct enum chan map any` |
-| `storage.type.primitive.xu` | `int bool string f64 i32 u32 u8 byte` |
-| `support.function.builtin.xu` | language builtins |
+| `storage.type.primitive.xu` | `int bool string f64 f32 i32 u32 i16 u16 i8 u8 u64 byte c_ptr` 等 |
+| `support.function.builtin.xu` | language builtins（含 atomic、volatile 等） |
 | `string.quoted.other.raw.xu` | raw `` `...` `` |
 
 ## License

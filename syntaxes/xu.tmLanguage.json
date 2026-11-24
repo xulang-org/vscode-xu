@@ -18,6 +18,9 @@
       "include": "#numbers"
     },
     {
+      "include": "#compile_tags"
+    },
+    {
       "include": "#functions"
     },
     {
@@ -28,6 +31,12 @@
     },
     {
       "include": "#flow_ops"
+    },
+    {
+      "include": "#raw_pointers"
+    },
+    {
+      "include": "#asm_expr"
     },
     {
       "include": "#phase_c_markers"
@@ -183,12 +192,15 @@
       "patterns": [
         {
           "name": "meta.function.xu",
-          "match": "\\b(fn)\\s+(?:\\([^)]*\\)\\s*)?([A-Za-z_][A-Za-z0-9_]*)(?:#[A-Za-z_][A-Za-z0-9_]*(?::\\s*[A-Za-z_][A-Za-z0-9_]*)?)?\\s*(?=\\()",
+          "match": "\\b(?:(unsafe)\\s+)?(fn)\\s+(?:\\([^)]*\\)\\s*)?([A-Za-z_][A-Za-z0-9_]*)(?:#[A-Za-z_][A-Za-z0-9_]*(?::\\s*[A-Za-z_][A-Za-z0-9_]*)?)?\\s*(?=\\()",
           "captures": {
             "1": {
               "name": "keyword.control.xu"
             },
             "2": {
+              "name": "keyword.control.xu"
+            },
+            "3": {
               "name": "entity.name.function.xu"
             }
           }
@@ -256,6 +268,45 @@
         }
       ]
     },
+    "compile_tags": {
+      "comment": "Compile tags at top of file, e.g. $$freestanding, $$baremetal, $$linux arm64, $$windows",
+      "match": "^\\s*(\\$\\$)\\s*([A-Za-z0-9_]+(?:\\s+[A-Za-z0-9_]+)*)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.directive.xu"
+        },
+        "2": {
+          "name": "keyword.control.directive.xu"
+        }
+      }
+    },
+    "raw_pointers": {
+      "comment": "Raw pointer types: *raw T, *raw mut T, *raw const T",
+      "match": "(\\*)\\s*(raw)(?:\\s+(mut|const))?\\b",
+      "captures": {
+        "1": {
+          "name": "keyword.operator.pointer.xu"
+        },
+        "2": {
+          "name": "storage.modifier.raw.xu"
+        },
+        "3": {
+          "name": "storage.modifier.xu"
+        }
+      }
+    },
+    "asm_expr": {
+      "comment": "Inline assembly: asm!(\"...\") or asm(\"...\")",
+      "match": "\\b(asm)(!?)\\s*(?=\\()",
+      "captures": {
+        "1": {
+          "name": "support.function.asm.xu"
+        },
+        "2": {
+          "name": "punctuation.definition.macro.xu"
+        }
+      }
+    },
     "phase_c_markers": {
       "comment": "Phase C mutability markers: `$name` (mutable binding) and `$&` (mutable borrow). Legacy `mut` / `&mut` stay in #modifiers while the compiler still accepts them.",
       "patterns": [
@@ -273,11 +324,11 @@
       ]
     },
     "modifiers": {
-      "match": "\\b(mut|pub)\\b",
+      "match": "\\b(mut|pub|extern)\\b",
       "name": "storage.modifier.xu"
     },
     "control_keywords": {
-      "match": "\\b(fn|if|else|for|in|while|match|xu|select|or|as|is|let)\\b",
+      "match": "\\b(fn|if|else|for|in|while|match|xu|select|or|as|is|let|unsafe)\\b",
       "name": "keyword.control.xu"
     },
     "other_keywords": {
@@ -289,11 +340,11 @@
       "name": "storage.type.xu"
     },
     "primitive_types": {
-      "match": "\\b(int|bool|string|f64|i32|u32|u8|byte)\\b",
+      "match": "\\b(int|bool|string|f64|f32|i32|u32|i16|u16|i8|u8|u64|byte|c_ptr|c_char|c_schar|c_short|c_ushort|c_long|c_ulong|c_longlong|c_ulonglong|c_size|c_ssize|c_bool|c_float|c_double)\\b",
       "name": "storage.type.primitive.xu"
     },
     "builtin_functions": {
-      "match": "\\b(println|eprintln|str|string_from_byte|string_from_bytes|parse_int|parse_float|starts_with|volatile_store|volatile_store8|volatile_load|volatile_load8|raise_irq|read_file|read_dir|write_file|args|now_ns|sleep_ns|assert|close|pid|ppid|uid|gid|euid|egid|pagesize|host_name|cwd|env_get|env_list|tmp_dir)\\b",
+      "match": "\\b(println|eprintln|str|string_from_byte|string_from_bytes|parse_int|parse_float|starts_with|volatile_store|volatile_store8|volatile_load|volatile_load8|volatile_read|volatile_write|raise_irq|atomic_load|atomic_store|atomic_add|atomic_cas|read_file|read_dir|write_file|args|now_ns|wall_time_ns|sleep_ns|assert|close|pid|ppid|uid|gid|euid|egid|pagesize|host_name|cwd|env_get|env_list|tmp_dir|os_system|os_exec|sys_random_fill|sys_wait_cancel|rom_call6|rom_callback|c_call6)\\b",
       "name": "support.function.builtin.xu"
     },
     "boolean_constants": {
