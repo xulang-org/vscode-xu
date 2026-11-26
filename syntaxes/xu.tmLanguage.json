@@ -366,11 +366,13 @@
     "flow_ops": {
       "patterns": [
         {
+          "comment": "Exit <<< and throw/error-handler >>> (`>>> expr`, `call >>>`, `call >>> (err) {}`).",
           "name": "keyword.control.flow.xu",
-          "match": "<<<"
+          "match": "<<<|>>>"
         },
         {
-          "match": "\\b(or)\\s+(>>)",
+          "comment": "Legacy deprecated `or >>` propagation alias.",
+          "match": "\\b(or)\\s+(>>)(?!>)",
           "captures": {
             "1": {
               "name": "keyword.control.xu"
@@ -381,8 +383,8 @@
           }
         },
         {
-          "comment": "Statement return << / throw >> (line start or after { ;).",
-          "match": "(?:^|(?<=[\\n{;]))(\\s*)(<<|>>)(?![<=])",
+          "comment": "Statement return << / legacy throw >> (line start or after { ;).",
+          "match": "(?:^|(?<=[\\n{;]))(\\s*)(<<|>>)(?![<=>])",
           "captures": {
             "2": {
               "name": "keyword.control.flow.xu"
