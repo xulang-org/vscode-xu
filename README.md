@@ -40,7 +40,7 @@ brackets, auto-closing pairs) work independently of the external Xu compiler.
 - Builtins: `println` `eprintln` `str` `parse_int` `parse_float` `args`
   `read_file` … `assert` `close` plus atomic, volatile & freestanding `volatile_store` `volatile_load` `raise_irq` `atomic_load` …
 - Operators（分 scope）:
-  - 语句控制流 → `keyword.control.flow.xu`：`<<` return / `>>>` throw & 错误处理 / `<<<` exit / 无操作数 `->` continue / `<-` break（兼容旧写法 `>>` / `or >>`）
+  - 语句控制流 → `keyword.control.flow.xu`：`<<` return / `>>` throw / `>>>` 错误传播与处理 / `<<<` exit / 无操作数 `->` continue / `<-` break
   - 表达式移位 → `keyword.operator.bitwise.xu`：`<<` `>>`
   - 区间 → `keyword.operator.range.xu`：`a:b` 的 `:`（for 头 / 切片 `[]` / match 整数臂，半开 `[start, end)`）
   - channel → `keyword.operator.channel.xu`：`ch <- x` / `<-ch`
@@ -81,7 +81,7 @@ ln -sfn "$PWD" "$HOME/.vscode/extensions/xu-lang.xu-language-$EXTENSION_VERSION"
 | `keyword.control.directive.xu` | 编译标签（如 `freestanding`, `linux`, `windows`） |
 | `storage.modifier.raw.xu` | `*raw` 中的 `raw` 指针修饰符 |
 | `support.function.asm.xu` | `asm!` / `asm` 内联汇编指令 |
-| `keyword.control.flow.xu` | 语句 `<<`/`>>>`/`<<<`；错误处理 `>>> (err) {}` / `>>>`；无操作数 `->`/`<-`（兼容旧写法 `>>` / `or >>`） |
+| `keyword.control.flow.xu` | 语句 `<<`/`>>`/`<<<`；错误处理 `>>> (err) {}` / `>>>`；无操作数 `->`/`<-` |
 | `keyword.operator.bitwise.xu` | 表达式移位 `<<` `>>` |
 | `keyword.operator.range.xu` | `a:b` 区间（`for i in a:b`、`xs[lo:hi]`、match `0:13`） |
 | `keyword.operator.channel.xu` | `ch <- x` / `<-ch` |
