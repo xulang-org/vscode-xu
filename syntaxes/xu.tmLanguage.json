@@ -328,7 +328,7 @@
       "name": "storage.modifier.xu"
     },
     "control_keywords": {
-      "match": "\\b(fn|if|else|for|in|while|match|xu|select|or|as|is|let|unsafe)\\b",
+      "match": "\\b(fn|if|else|for|in|while|match|xu|select|as|is|let|unsafe)\\b",
       "name": "keyword.control.xu"
     },
     "other_keywords": {
@@ -366,24 +366,12 @@
     "flow_ops": {
       "patterns": [
         {
-          "comment": "Exit <<< and throw/error-handler >>> (`>>> expr`, `call >>>`, `call >>> (err) {}`).",
+          "comment": "Exit <<< and error propagation/handler >>> (`call >>>`, `call >>> (err) {}`).",
           "name": "keyword.control.flow.xu",
           "match": "<<<|>>>"
         },
         {
-          "comment": "Legacy deprecated `or >>` propagation alias.",
-          "match": "\\b(or)\\s+(>>)(?!>)",
-          "captures": {
-            "1": {
-              "name": "keyword.control.xu"
-            },
-            "2": {
-              "name": "keyword.control.flow.xu"
-            }
-          }
-        },
-        {
-          "comment": "Statement return << / legacy throw >> (line start or after { ;).",
+          "comment": "Statement return << / throw >> (line start or after { ;).",
           "match": "(?:^|(?<=[\\n{;]))(\\s*)(<<|>>)(?![<=>])",
           "captures": {
             "2": {
